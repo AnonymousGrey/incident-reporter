@@ -2,16 +2,23 @@
 
 ## 🎯 Quick Deploy (5 minutes)
 
-### Option 1: Vercel Dashboard (Easiest)
+### Option 1: Vercel Dashboard (Easiest) ✅
 
-1. Push your code to GitHub/GitLab
-2. Go to [vercel.com](https://vercel.com)
-3. Click "Add New Project"
-4. Select your repository
-5. Accept default settings, click "Deploy"
-6. Go to Project Settings → Environment Variables
-7. Add your Google Sheets credentials
-8. Redeploy
+1. Go to [vercel.com](https://vercel.com)
+2. Click **"Add New..." → "Project"**
+3. Select your GitHub repository: `AnonymousGrey/incident-reporter`
+4. Click **"Import"**
+5. Before hitting Deploy, add Environment Variables:
+
+**Environment Variables:**
+```
+NEXT_PUBLIC_SUPABASE_URL=https://qnbffmkgclmlsdyalsct.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_YdALmmfRxeynPTtZQpuEpw_qcBY_xNH
+SUPABASE_DB_PASSWORD=Uzghi81cb4@
+```
+
+6. Click **"Deploy"** and wait (2-5 minutes)
+7. Get your live URL: `https://incident-reporter-xxx.vercel.app`
 
 ### Option 2: Vercel CLI (Fastest)
 
@@ -29,11 +36,9 @@ vercel
 vercel --prod
 
 # Add environment variables
-vercel env add GOOGLE_SERVICE_ACCOUNT_EMAIL
-vercel env add GOOGLE_PRIVATE_KEY
-vercel env add GOOGLE_PRIVATE_KEY_ID
-vercel env add GOOGLE_PROJECT_ID
-vercel env add GOOGLE_CLIENT_ID
+vercel env add NEXT_PUBLIC_SUPABASE_URL
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY
+vercel env add SUPABASE_DB_PASSWORD
 
 # Redeploy with environment variables
 vercel --prod
@@ -41,13 +46,37 @@ vercel --prod
 
 ## 📋 Pre-Deployment Checklist
 
-- [ ] `.env.local.example` created with sample keys
-- [ ] `.env.local` is in `.gitignore` (already configured)
-- [ ] No secrets committed in git history
-- [ ] `package.json` has all required dependencies
-- [ ] `next.config.js` is properly configured
-- [ ] Tailwind CSS compilation tested locally
-- [ ] Geolocation tested in development
+- [x] Supabase table created
+- [x] `.env.local` is in `.gitignore` (secrets NOT exposed)
+- [x] Code pushed to GitHub
+- [x] Database configured (Supabase)
+- [x] API keys ready
+
+## 🔒 Security Notes
+
+⚠️ **URGENT**: Your Supabase password was exposed. After deployment:
+
+1. Go to Supabase Dashboard → Settings → Database Password
+2. Change password
+3. Update Vercel environment variables with new password
+4. No need to redeploy - just update env vars
+
+## 📊 After Deployment
+
+Your app is now live at unique URL:
+```
+https://incident-reporter-xxx.vercel.app
+```
+
+### Access Your Data:
+- **View Data**: `/api/view-incidents`
+- **Download CSV**: `/api/download-incidents?format=csv`
+- **Download JSON**: `/api/download-incidents?format=json`
+
+### Monitor Performance:
+1. Vercel Dashboard → Your Project
+2. View Analytics, Logs, Deployments
+3. Check error messages in real-time
 - [ ] Google Sheets submission tested locally
 - [ ] All environment variable names documented
 - [ ] Google Sheet is shared with service account

@@ -14,7 +14,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Save incident to Supabase
+// Save incident to Supabase (keeps only the latest one)
 export async function saveIncident(data: {
   type: string
   latitude: number
@@ -25,6 +25,18 @@ export async function saveIncident(data: {
   try {
     console.log('💾 Saving incident to Supabase...')
 
+    // Step 1: Delete all old records
+    console.log('🗑️  Deleting old incidents...')
+    const { error: deleteError } = await supabase
+      .from('incidents')
+      .delete()
+      .neq('id', -1) // This deletes all records (workaround since we can't use .gt(0))
+
+    if (deleteError && deleteError.code !== 'PGRST116') {
+      console.warn('⚠️  Warning deleting old incidents:', deleteError)
+    }
+
+    // Step 2: Insert new record
     const { data: result, error } = await supabase
       .from('incidents')
       .insert([
